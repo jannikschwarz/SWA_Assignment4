@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import Register from '../components/register.vue'
-import Login from '../components/Login.vue'
-import Highscore from '../components/highscore.vue'
-import Sidebar from '../components/sidebar.vue'
+import Register from '../views/register.vue'
+import Login from '../views/Login.vue'
+import Highscore from '../views/highscore.vue'
+import Gameboard from '../views/gameBoard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +27,11 @@ const router = createRouter({
       path: '/highscore',
       name: 'highscore',
       component: Highscore
+    },
+    {
+      path: '/gameboard',
+      name: 'gameboard',
+      component: Gameboard
     }
   ]
 })

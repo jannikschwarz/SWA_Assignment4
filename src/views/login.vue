@@ -13,65 +13,61 @@
                     <span></span>
                     <label>Password</label>
                 </div>
-                <div class="txt_field">
-                    <input type="email" v-model="email"/>
-                    <span></span>
-                    <label>Email</label>
-                </div>
-                <button @click="register">Register</button>
+                <button @click="login">Login</button>
             </div>
         </div>
+        <RouterLink to="/register">Not a member? Register!</RouterLink>
         <p class="error">{{error}}</p>
 </div>
 </template>
 
 <script>
     import axios from 'axios';
-    import { useRouter } from 'vue-router';
+    import { useRouter, RouterLink } from 'vue-router';
+    import { setUserToken, setUsername } from '../models/data.ts'
 
-    let router;
-    
-    async function register(){
-        if(!this.username || !this.password || !this.email){
-            this.error = 'Missing username or Password';
+    let router = useRouter();
+
+    async function login(){
+        if (!this.username || !this.password) {
+            this.error = "Missing username or login"
             return;
         }
 
-        let paylod = { 
-            email: this.email,
-            password: this.password,
-            username: this.username
-        }
-        let res = await axios.post('http://localhost:9090/users', paylod);
+        let paylod = { password: this.password, username: this.username}
+        let res = await axios.post("http://localhost:9090/login", paylod);
 
         if(res.status != 403){
             this.userToken = res.data.token; 
-            router.push('/home')
+            router.push({name: 'home', params: {token: this.userToken}})
+            setUserToken(this.userToken);
+            setUsername(this.username);
         }else{
             this.error = "Failed to login";
         }
     }
 
+
     export default {
-        setup(){
-            router = useRouter();
-        },
-        data() {
-            return {
-                email: "",
-                username: "",
-                error: '',
-                password: "",
-                userToken: "",
-            }
-        },
-        methods: {
-            register
-        }
-    }
+    setup() {
+        router = useRouter();
+    },
+    data() {
+        return {
+            username: '',
+            error: '',
+            password: '',
+            userToken: '',
+        };
+    },
+    methods: {
+        login
+    },
+    components: { RouterLink }
+}
 </script>
 
-<style>
+<style scoped>
     *{
         margin: 0;
         padding: 0;

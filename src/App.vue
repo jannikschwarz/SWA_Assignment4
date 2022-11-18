@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 
 export default {
   name: 'App',
@@ -13,7 +13,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped>
@@ -77,5 +76,11 @@ nav a:first-of-type {
     padding: 1rem 0;
     margin-top: 1rem;
   }
+
+  .grid-container {
+    align-items: center;
+    column-gap: 15px;
+    display: inline-grid;
+}
 }
 </style>

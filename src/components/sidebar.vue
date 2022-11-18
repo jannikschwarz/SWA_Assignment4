@@ -1,31 +1,49 @@
 <template>
     <div class="sidebar">
-        <h1>Welcome</h1>
-        <h1>{{username}}</h1>
-        <div class="navItem">
-            <i class="fas fa-list-ol"></i>
-            <router-link to="/highscore">Highscore</router-link>
-        </div>
+        <h1>Match3!</h1>
+        <h2>Welcome</h2>
+        <h2>{{username}}</h2>
         <div class="navItem">
             <i class="fas fa-user"/>
             <router-link to="/highscore">Profile</router-link>
         </div>
         <div class="navItem">
-            <i class="fas fa-gamepad"/>
-            <router-link to="/highscore">Game</router-link>
+            <i class="fas fa-list-ol"></i>
+            <router-link to="/highscore">Highscore</router-link>
+        </div>
+        <div class="navItem">
+            <i class="fas fa-list-ol"></i>
+            <router-link to="/gameboard">Game</router-link>
         </div>
         <div class="navItem">
             <i class="fas fa-list-ol"/>
-            <router-link to="/highscore">Login</router-link>
+            <router-link to="/" @click="logout">Logout</router-link>
         </div>
     </div>
 </template>
 
 <script>
 import { getUserToken, getUsername } from '../models/data';
-import { RouterLink, RouterView } from 'vue-router'
+import { useRouter, useRoute, RouterLink } from 'vue-router'
+import axios from 'axios';
+
+let router = useRouter();
+
+async function logout(){
+
+  let res = await axios.post("http://localhost:9090/logout?token=" + getUserToken());
+
+  if(res.status == 403){
+    router.push({name: 'home', params: {token: this.userToken}});
+  }else{
+    console.log("Logout succeded")
+  }
+}
 
 export default {
+  setup() {
+    router = useRouter();
+  },
   name: 'Sidebar',
   data() {
     return {
@@ -36,11 +54,14 @@ export default {
   created() {
     this.token = getUserToken();
     this.username = getUsername();
-  }
+  },
+  methods: {
+        logout
+    },
 }
 </script>
 
-<style>
+<style scoped>
 .sidebar {
   color: rgb(6, 134, 23);
   background-color: rgb(33, 34, 33);
